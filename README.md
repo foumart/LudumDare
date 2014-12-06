@@ -3,7 +3,7 @@ LudumDare
 
 #### Pre-Shared scripts for using in LudumDare Compo
 
-(originaly prepared for LD#31)
+(prepared for LD#31)
 
 Includes:
 
