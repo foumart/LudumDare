@@ -155,7 +155,7 @@ package com.foumartgames.sound {
 			if(!multiple) for each(var channel:Channel in soundArray){
 				if(channel.name == newName) return;
 			}
-			if(!newSound) throw new Error("ClassName::SoundFX(static); Function::playSound @param sound must be an initialized Sound object or a string name from sound_collection.")
+			if(!newSound) throw new Error("ClassName::SoundFX(static); Function::playSound @param sound ("+sound+") must be an initialized Sound object or a string name from sound_collection.")
 			var newChannel:Channel = new Channel(newSound, newName, volume, (_soundMute)? 0 : _soundVolume, soundCompleted);
 			soundArray.push(newChannel);
 		}
