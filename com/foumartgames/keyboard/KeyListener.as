@@ -20,7 +20,7 @@
 
 package com.foumartgames.keyboard {
 	
-	/*
+	/**
 	* KeyListener - Basic Keyboard Event Controller, prepared for LudumDare#31
 	*
 	* @langversion ActionScript 3.0
@@ -35,12 +35,36 @@ package com.foumartgames.keyboard {
 	public class KeyListener {
 		
 		public var up:*
-		public var down:*;
+		public var down:*
 		public var left:*
-		public var right:*;
+		public var right:*
 		public var enter:*
 		public var space:*
 		public var esc:*
+		public var tab:*
+		public var backspace:*
+		
+		public var zero:*
+		public var one:*
+		public var two:*
+		public var three:*
+		public var four:*
+		public var five:*
+		public var six:*
+		public var seven:*
+		public var eight:*
+		public var nine:*
+		
+		public var numzero:*
+		public var numone:*
+		public var numtwo:*
+		public var numthree:*
+		public var numfour:*
+		public var numfive:*
+		public var numsix:*
+		public var numseven:*
+		public var numeight:*
+		public var numnine:*
 		
 		public var a:*
 		public var b:*
@@ -75,7 +99,7 @@ package com.foumartgames.keyboard {
 		private var codeHolder:Array = [];
 		private var previousCode:uint = 0;
 		
-		/*
+		/**
 			* Usage:
 			* var keyListener:KeyListener = new KeyListener(stage);
 			* keyListener.space = function():void{ trace("space key was pressed"); }
@@ -90,12 +114,25 @@ package com.foumartgames.keyboard {
 			start();
 		}
 		
-		private function start():void{
-			_stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKey, false);
-			_stage.addEventListener(KeyboardEvent.KEY_UP, detectKeyUp, false);
+		public function start():void{
+			if(!_stage.hasEventListener(KeyboardEvent.KEY_DOWN)) _stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKey, false);
+			if(!_stage.hasEventListener(KeyboardEvent.KEY_UP)) _stage.addEventListener(KeyboardEvent.KEY_UP, detectKeyUp, false);
 		}
 		
-		/*
+		/**
+			* Temporaly disables the controller
+			*
+			* @langversion ActionScript 3.0
+			* @playerversion Flash 9.0
+			* @tiptext
+		*/ 
+		public function pause():void{
+			if(_stage.hasEventListener(KeyboardEvent.KEY_DOWN)) _stage.removeEventListener(KeyboardEvent.KEY_DOWN, detectKey, false);
+			if(_stage.hasEventListener(KeyboardEvent.KEY_UP)) _stage.removeEventListener(KeyboardEvent.KEY_UP, detectKeyUp, false);
+			if(_stage.hasEventListener(Event.ENTER_FRAME)) _stage.removeEventListener(Event.ENTER_FRAME, hold);
+		}
+		
+		/**
 			* Stops the controller and clears all key references
 			*
 			* @langversion ActionScript 3.0
@@ -109,7 +146,10 @@ package com.foumartgames.keyboard {
 			codeHolder = [];
 			currentCode = 0;
 			// remove functional key references
-			up = null; down = null; left = null; right = null; enter = null; space = null; esc = null;
+			up = null; down = null; left = null; right = null; enter = null; space = null; esc = null; tab = null; backspace = null;
+			// remove numbers and numpad key references
+			zero = null; one = null; two = null; three = null; four = null; five = null; six = null; seven = null; eight = null; nine = null;
+			numzero = null; numone = null; numtwo = null; numthree = null; numfour = null; numfive = null; numsix = null; numseven = null; numeight = null; numnine = null;
 			// remove all letter key references
 			for(var i:uint = 65; i <= 90; i ++) {
 				this[String.fromCharCode(i).toLowerCase()] = null;
@@ -120,22 +160,51 @@ package com.foumartgames.keyboard {
 			if(codeHolder.indexOf(C.keyCode) == -1) {
 				previousCode = currentCode;
 				currentCode = C.keyCode;
-				if(currentCode == 32){
-					if(space)space();
-				} else if(currentCode == 13){
-					if(enter)enter();
-				} else if(currentCode == 38){
-					if(up)up();
-				} else if(currentCode == 40){
-					if(down)down();
-				} else if(currentCode == 37){
-					if(left)left();
-				} else if(currentCode == 39){
-					if(right)right();
-				} else if(currentCode == 27){
-					if(esc)esc();
-				} else if(currentCode >= 65 && currentCode <= 90){
+				if(currentCode >= 65 && currentCode <= 90){
 					if(this[String.fromCharCode(currentCode).toLowerCase()])this[String.fromCharCode(currentCode).toLowerCase()]();
+				} else switch(currentCode){
+					case 27: if(esc) esc();
+						break;
+					case 32: if(space) space();
+						break;
+					case 13: if(enter) enter();
+						break;
+					case 38: if(up) up();
+						break;
+					case 40: if(down) down();
+						break;
+					case 37: if(left) left();
+						break;
+					case 39: if(right) right();
+						break;
+					case 9: if(tab) tab();
+						break;
+					case 8: if(backspace) backspace();
+						break;
+					//num
+					case 48: if(zero) zero(); break;
+					case 49: if(one) one(); break;
+					case 50: if(two) two(); break;
+					case 51: if(three) three(); break;
+					case 52: if(four) four(); break;
+					case 53: if(five) five(); break;
+					case 54: if(six) six(); break;
+					case 55: if(seven) seven(); break;
+					case 56: if(eight) eight(); break;
+					case 57: if(nine) nine(); break;
+					//numpad
+					case 96: if(numzero) numzero(); break;
+					case 97: if(numone) numone(); break;
+					case 98: if(numtwo) numtwo(); break;
+					case 99: if(numthree) numthree(); break;
+					case 100: if(numfour) numfour(); break;
+					case 101: if(numfive) numfive(); break;
+					case 102: if(numsix) numsix(); break;
+					case 103: if(numseven) numseven(); break;
+					case 104: if(numeight) numeight(); break;
+					case 105: if(numnine) numnine(); break;
+					
+					default: trace("default key:"+currentCode);
 				}
 				if(codeHolder.indexOf(currentCode) == -1){
 					codeHolder.push(currentCode);
